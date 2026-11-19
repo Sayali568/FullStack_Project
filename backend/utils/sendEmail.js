@@ -1,6 +1,13 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async ({ email, subject, message }) => {
+  const user = process.env.GMAIL_USER;
+  const pass = process.env.GMAIL_PASS;
+  if (!user || !pass || user.includes('your_email') || pass.includes('your_email')) {
+    console.warn(`Email skipped for ${email}: Gmail credentials are not configured`);
+    return;
+  }
+
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
